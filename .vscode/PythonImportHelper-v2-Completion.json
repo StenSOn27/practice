@@ -1,0 +1,107 @@
+[
+    {
+        "label": "Iterable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "ConsumeWithTimeout",
+        "importPath": "fibonacci_lib.consume_with_timeout",
+        "description": "fibonacci_lib.consume_with_timeout",
+        "isExtraImport": true,
+        "detail": "fibonacci_lib.consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "fibonacci_project.examples.main",
+        "description": "fibonacci_project.examples.main",
+        "peekOfCode": "def main() -> None:\n    consumer = ConsumeWithTimeout(infinite_fibonacci(), timeout_seconds=3)\n    for _ in consumer:\n        pass\nif __name__ == '__main__':\n    main()",
+        "detail": "fibonacci_project.examples.main",
+        "documentation": {}
+    },
+    {
+        "label": "ConsumeWithTimeout",
+        "kind": 6,
+        "importPath": "fibonacci_project.fibonacci_lib.consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.consume_with_timeout",
+        "peekOfCode": "class ConsumeWithTimeout:\n    def __init__(\n        self,  # noqa: ANN101\n        iterable: Iterable,\n        timeout_seconds: float,\n        delay: float = 0.5\n    ) -> None:\n        self.iterable = iterable\n        self.timeout_seconds = timeout_seconds\n        self.delay = delay",
+        "detail": "fibonacci_project.fibonacci_lib.consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "infinite_fibonacci",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.fibonacci",
+        "description": "fibonacci_project.fibonacci_lib.fibonacci",
+        "peekOfCode": "def infinite_fibonacci() -> Generator[int, None, None]:\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+        "detail": "fibonacci_project.fibonacci_lib.fibonacci",
+        "documentation": {}
+    },
+    {
+        "label": "test_empty_iterator",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "peekOfCode": "def test_empty_iterator() -> None:\n    data = iter([])\n    with patch('time.time') as mock_time, patch('time.sleep'):\n        mock_time.side_effect = [0]\n        consumer = ConsumeWithTimeout(data, timeout_seconds=5, delay=0.1)\n        result = list(consumer)\n    assert result == []\n    assert consumer.total == 0\n    assert consumer.count == 0\ndef test_large_delay_but_small_timeout() -> None:",
+        "detail": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "test_large_delay_but_small_timeout",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "peekOfCode": "def test_large_delay_but_small_timeout() -> None:\n    data = iter([1, 2, 3])\n    with patch('time.time') as mock_time, patch('time.sleep'):\n        mock_time.side_effect = [0, 0.1, 2.5]\n        consumer = ConsumeWithTimeout(data, timeout_seconds=2, delay=2)\n        result = list(consumer)\n    assert result == [1]\n    assert consumer.total == 1\n    assert consumer.count == 1\ndef test_iterator_with_zeros() -> None:",
+        "detail": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "test_iterator_with_zeros",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "peekOfCode": "def test_iterator_with_zeros() -> None:\n    data = iter([0, 0, 0])\n    with patch('time.time') as mock_time, patch('time.sleep'):\n        mock_time.side_effect = [0, 0.1, 0.2, 0.3, 1.0]\n        consumer = ConsumeWithTimeout(data, timeout_seconds=2, delay=0.1)\n        result = list(consumer)\n    assert result == [0, 0, 0]\n    assert consumer.total == 0\n    assert consumer.count == 3\ndef test_timeout_exactly_reached() -> None:",
+        "detail": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "test_timeout_exactly_reached",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "peekOfCode": "def test_timeout_exactly_reached() -> None:\n    data = iter([1, 2])\n    with patch('time.time') as mock_time, patch('time.sleep'):\n        mock_time.side_effect = [0, 0.5, 1.0]\n        consumer = ConsumeWithTimeout(data, timeout_seconds=1.0, delay=0.1)\n        result = list(consumer)\n    assert result == [1]\n    assert consumer.count == 1\ndef test_stop_iteration_raised() -> None:\n    data = iter([1])",
+        "detail": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "documentation": {}
+    },
+    {
+        "label": "test_stop_iteration_raised",
+        "kind": 2,
+        "importPath": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "description": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "peekOfCode": "def test_stop_iteration_raised() -> None:\n    data = iter([1])\n    with patch('time.time') as mock_time, patch('time.sleep'):\n        mock_time.side_effect = [0, 0.1, 0.2]\n        consumer = ConsumeWithTimeout(data, timeout_seconds=2, delay=0.1)\n        it = iter(consumer)\n        current_value = next(it)\n        assert current_value == 1\n        with pytest.raises(StopIteration):\n            next(it)",
+        "detail": "fibonacci_project.fibonacci_lib.test_consume_with_timeout",
+        "documentation": {}
+    }
+]
