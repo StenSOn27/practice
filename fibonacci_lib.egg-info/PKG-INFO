@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: fibonacci_lib
+Version: 0.1.0
+Summary: A library for consuming infinite Fibonacci with timeout.
+Author-email: Taras <test1234@gmail.com>
+License-Expression: MIT
+License-File: LICENSE
+Dynamic: license-file
